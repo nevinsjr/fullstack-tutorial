@@ -10,8 +10,8 @@ export class LaunchAPI extends RESTDataSource {
       super();
     }
 
-    // TODO: the anys hurt my soul
-    public async getAllLaunches() : Promise<Array<any>> {
+    // TODO: fix return type
+    public async getAllLaunches() : Promise<Array<{}>> {
         // TODO: create an interface for the response
         const response : any = await this.get(this.launches);
         return response && response.length ?
@@ -19,15 +19,15 @@ export class LaunchAPI extends RESTDataSource {
             [];
     }
 
-    // TODO: any!!!!!!
-    public async getLaunchById({ launchId } : any) : Promise<{}> {
+    // TODO: return type
+    public async getLaunchById({ launchId } : { launchId : number }) : Promise<{}> {
         console.log(arguments);
         const res = await this.get(this.launches, { flight_number: launchId });
         return this.launchReducer(res[0]);
     }
       
-    // TODO: any!!!
-    public getLaunchesByIds({ launchIds } : any) {
+    // TODO: return type
+    public async getLaunchesByIds({ launchIds } : { launchIds : Array<number> }) : Promise<Array<{}>>  {
         return Promise.all(
             launchIds.map((launchId : any) => this.getLaunchById({ launchId })),
         );

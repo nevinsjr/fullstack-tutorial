@@ -1,11 +1,12 @@
 const SQL = require('sequelize');
+// import { SQL } from 'sequelize';
 
-module.exports.paginateResults = ({
+export const paginateResults = ({
   after: cursor,
   pageSize = 20,
   results,
   // can pass in a function to calculate an item's cursor
-  getCursor = () => null,
+  getCursor = (item ?: any) => null,
 }) => {
   if (pageSize < 1) return [];
 
@@ -30,7 +31,7 @@ module.exports.paginateResults = ({
   results.slice(cursorIndex >= 0 ? cursorIndex + 1 : 0, cursorIndex >= 0);
 };
 
-module.exports.createStore = () => {
+export const createStore = () => {
   const Op = SQL.Op;
   const operatorsAliases = {
     $in: Op.in,

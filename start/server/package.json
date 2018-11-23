@@ -7,6 +7,7 @@
     "tsc": "./node_modules/.bin/tsc",
     "test": "jest",
     "start": "npm run tsc && nodemon dist/index.js",
+    "debug": "npm run tsc && nodemon --inspect-brk dist/index.js",
     "start:ci": "node src/index.js"
   },
   "author": "",
