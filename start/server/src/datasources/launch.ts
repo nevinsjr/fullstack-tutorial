@@ -21,7 +21,6 @@ export class LaunchAPI extends RESTDataSource {
 
     // TODO: return type
     public async getLaunchById({ launchId } : { launchId : number }) : Promise<{}> {
-        console.log(arguments);
         const res = await this.get(this.launches, { flight_number: launchId });
         return this.launchReducer(res[0]);
     }
@@ -50,5 +49,5 @@ export class LaunchAPI extends RESTDataSource {
             type: launch.rocket.rocket_type,
           },
         };
-      }
+    }
 }
