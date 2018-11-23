@@ -1,5 +1,4 @@
 const SQL = require('sequelize');
-// import { SQL } from 'sequelize';
 
 export const paginateResults = ({
   after: cursor,
@@ -27,8 +26,6 @@ export const paginateResults = ({
           Math.min(results.length, cursorIndex + 1 + pageSize),
         )
     : results.slice(0, pageSize);
-
-  results.slice(cursorIndex >= 0 ? cursorIndex + 1 : 0, cursorIndex >= 0);
 };
 
 export const createStore = () => {
