@@ -1,5 +1,5 @@
 import { ApolloServer, ServerInfo } from 'apollo-server';
-import { typeDefs } from './schema';
+import { typeDefs } from './schema/schema';
 import { LaunchAPI } from './datasources/launch';
 import { UserAPI } from './datasources/user';
 import { createStore } from './utils';
@@ -10,6 +10,7 @@ async function runServer(server : ApolloServer) : Promise<void> {
     console.log(`🚀 Server ready at ${serverInfo.url}`);
 }
 
+//TODO: type meh
 const store = createStore();
 
 runServer(new ApolloServer({

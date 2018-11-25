@@ -1,39 +1,35 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
+import { ILaunchResponse, ISpacexLaunch } from './datasources.interfaces';
 
 export class LaunchAPI extends RESTDataSource {
     
     public baseURL : string = 'https://api.spacexdata.com/v2/';
 
-    private readonly launches : string = 'launches';
+    private readonly LAUNCHES : string = 'launches';
     
     constructor() {
       super();
     }
 
-    // TODO: fix return type
-    public async getAllLaunches() : Promise<Array<{}>> {
-        // TODO: create an interface for the response
-        const response : any = await this.get(this.launches);
+    public async getAllLaunches() : Promise<Array<ILaunchResponse>> {
+        const response : Array<ISpacexLaunch> = await this.get<Array<ISpacexLaunch>>(this.LAUNCHES);
         return response && response.length ?
-            response.map((launch : any) => this.launchReducer(launch)) :
+            response.map((launch : ISpacexLaunch) => this.launchReducer(launch)) :
             [];
     }
 
-    // TODO: return type
-    public async getLaunchById({ launchId } : { launchId : number }) : Promise<{}> {
-        const res = await this.get(this.launches, { flight_number: launchId });
+    public async getLaunchById({ launchId } : { launchId : number }) : Promise<ILaunchResponse> {
+        const res = await this.get<Array<ISpacexLaunch>>(this.LAUNCHES, { flight_number: launchId });
         return this.launchReducer(res[0]);
     }
       
-    // TODO: return type
-    public async getLaunchesByIds({ launchIds } : { launchIds : Array<number> }) : Promise<Array<{}>>  {
+    public async getLaunchesByIds({ launchIds } : { launchIds : Array<number> }) : Promise<Array<ILaunchResponse>>  {
         return Promise.all(
-            launchIds.map((launchId : any) => this.getLaunchById({ launchId })),
+            launchIds.map((launchId : number) => this.getLaunchById({ launchId })),
         );
     }
 
-    // TODO: fix the any type
-    private launchReducer(launch : any) {
+    private launchReducer(launch : ISpacexLaunch) : ILaunchResponse {
         return {
           id: launch.flight_number || 0,
           cursor: `${launch.launch_date_unix}`,

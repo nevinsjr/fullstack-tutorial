@@ -1,4 +1,4 @@
-import { IDataSources } from "./datasources/datasources.interfaces";
+import { IDataSources, ILaunchResponse } from "./datasources/datasources.interfaces";
 import { IResolvers, IResolverObject } from "graphql-tools";
 import { paginateResults } from './utils';
 
@@ -10,10 +10,10 @@ export const resolvers : IResolvers = {
     Query: <IResolverObject>{
         //TODO: this is gross
         launches: async (_, { pageSize = 20, after } : {pageSize : number, after : any}, { dataSources } : { dataSources : IDataSources}) : Promise<{launches : Array<Object>; cursor : any; hasMore : boolean;}>  => {
-            const allLaunches : Array<{}> = await dataSources.launchAPI.getAllLaunches();
+            const allLaunches : Array<ILaunchResponse> = await dataSources.launchAPI.getAllLaunches();
             allLaunches.reverse();
 
-            const launches : Array<Object> = paginateResults({
+            const launches : Array<ILaunchResponse> = paginateResults({
                 after,
                 pageSize,
                 results: allLaunches,
