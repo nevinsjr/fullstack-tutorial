@@ -33,7 +33,7 @@ const GET_LAUNCH = gql`
   }
 `;
 
-describe('Server - e2e', () => {
+xdescribe('Server - e2e', () => {
   let stop, graphql;
 
   beforeEach(async () => {

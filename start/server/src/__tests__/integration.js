@@ -63,7 +63,7 @@ const BOOK_TRIPS = gql`
   }
 `;
 
-describe('Queries', () => {
+xdescribe('Queries', () => {
   it('fetches list of launches', async () => {
     // create an instance of ApolloServer that mocks out context, while reusing
     // existing dataSources, resolvers, and typeDefs.
@@ -106,7 +106,7 @@ describe('Queries', () => {
   });
 });
 
-describe('Mutations', () => {
+xdescribe('Mutations', () => {
   it('returns login token', async () => {
     const { server, launchAPI, userAPI } = constructTestServer({
       context: () => {},

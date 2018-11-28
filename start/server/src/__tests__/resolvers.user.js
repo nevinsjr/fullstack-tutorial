@@ -1,6 +1,6 @@
 const resolvers = require('../resolvers');
 
-describe('[User.trips]', () => {
+xdescribe('[User.trips]', () => {
   const mockContext = {
     dataSources: {
       userAPI: { getLaunchIdsByUser: jest.fn() },

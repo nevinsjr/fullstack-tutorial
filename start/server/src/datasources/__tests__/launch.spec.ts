@@ -1,4 +1,4 @@
-const LaunchAPI = require('../launch');
+import { LaunchAPI } from '../launch';
 
 /**
  * There are mock Launches at the bottom of this file.
@@ -12,13 +12,7 @@ const mocks = {
 };
 
 const ds = new LaunchAPI();
-ds.get = mocks.get;
-
-describe('[LaunchAPI.launchReducer]', () => {
-  it('properly transforms launch', () => {
-    expect(ds.launchReducer(mockLaunchResponse)).toEqual(mockLaunch);
-  });
-});
+ds['get'] = mocks.get;
 
 describe('[LaunchAPI.getAllLaunches]', () => {
   it('looks up launches from api', async () => {
@@ -28,6 +22,16 @@ describe('[LaunchAPI.getAllLaunches]', () => {
     const res = await ds.getAllLaunches();
 
     expect(res).toEqual([mockLaunch]);
+    expect(mocks.get).toBeCalledWith('launches');
+  });
+
+  it('gets an empty result set when there is an empty response', async () => {
+    // if api response is list of raw launches,
+    // res should be list of transformed launches
+    mocks.get.mockReturnValueOnce([]);
+    const res = await ds.getAllLaunches();
+
+    expect(res).toEqual([]);
     expect(mocks.get).toBeCalledWith('launches');
   });
 });

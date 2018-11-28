@@ -15,7 +15,7 @@ const mockContext = {
   user: { id: 1, email: 'a@a.a' },
 };
 
-describe('[Mutation.bookTrips]', () => {
+xdescribe('[Mutation.bookTrips]', () => {
   const { bookTrips } = mockContext.dataSources.userAPI;
   const { getLaunchesByIds } = mockContext.dataSources.launchAPI;
 
@@ -54,7 +54,7 @@ describe('[Mutation.bookTrips]', () => {
   });
 });
 
-describe('[Mutation.cancelTrip]', () => {
+xdescribe('[Mutation.cancelTrip]', () => {
   const { cancelTrip } = mockContext.dataSources.userAPI;
   const { getLaunchById } = mockContext.dataSources.launchAPI;
 
@@ -92,7 +92,7 @@ describe('[Mutation.cancelTrip]', () => {
   });
 });
 
-describe('[Mutation.login]', () => {
+xdescribe('[Mutation.login]', () => {
   const { findOrCreateUser } = mockContext.dataSources.userAPI;
 
   it('returns base64 encoded email if successful', async () => {
