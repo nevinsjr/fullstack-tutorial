@@ -48,21 +48,21 @@ describe('[LaunchAPI.getLaunchById]', () => {
   });
 });
 
-describe('[LaunchAPI.getLaunchesByIds]', () => {
-  it('should call getLaunchById for each id', async () => {
-    // temporarily overwrite getLaunchById to test
-    const getLaunchById = ds.getLaunchById;
-    ds.getLaunchById = jest.fn(() => ({ id: 1 }));
+// describe('[LaunchAPI.getLaunchesByIds]', () => {
+//   it('should call getLaunchById for each id', async () => {
+//     // temporarily overwrite getLaunchById to test
+//     const getLaunchById = ds.getLaunchById;
+//     ds.getLaunchById = jest.fn(() => ({ id: 1 }));
 
-    const res = await ds.getLaunchesByIds({ launchIds: [1, 2] });
+//     const res = await ds.getLaunchesByIds({ launchIds: [1, 2] });
 
-    expect(res).toEqual([{ id: 1 }, { id: 1 }]);
-    expect(ds.getLaunchById).toHaveBeenCalledTimes(2);
+//     expect(res).toEqual([{ id: 1 }, { id: 1 }]);
+//     expect(ds.getLaunchById).toHaveBeenCalledTimes(2);
 
-    // set getLaunchById back to default
-    ds.getLaunchById = getLaunchById;
-  });
-});
+//     // set getLaunchById back to default
+//     ds.getLaunchById = getLaunchById;
+//   });
+// });
 
 /**
  * MOCK DATA BELOW

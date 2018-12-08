@@ -12,6 +12,7 @@ export const typeDefs = gql`
             """
             after: String
         ): LaunchConnection!
+        launchesByUser: Launches
         launch(id: ID!): Launch
         me: User
     }
@@ -35,6 +36,10 @@ export const typeDefs = gql`
         cursor: String!
         hasMore: Boolean!
         launches: [Launch]!
+    }
+
+    type Launches {
+        launches: [Launch]
     }
 
     type TripUpdateResponse {

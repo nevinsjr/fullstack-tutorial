@@ -1,5 +1,8 @@
+import { IUserInstance, ITripInstance } from './../utils';
 const { DataSource } = require('apollo-datasource');
 const isEmail = require('isemail');
+
+//TODO: so much work to do here...
 
 export class UserAPI extends DataSource {
   constructor({ store } : any) {
@@ -22,17 +25,19 @@ export class UserAPI extends DataSource {
    * have to be. If the user is already on the context, it will use that user
    * instead
    */
-  async findOrCreateUser({ email: emailArg } : any = {}) {
-    const email =
+  public async findOrCreateUser({ email: emailArg } : {email : string | null} = { email: null}) : Promise<IUserInstance | null> {
+    const email : string =
       this.context && this.context.user ? this.context.user.email : emailArg;
+    
+    // If we are not valid, bail...
     if (!email || !isEmail.validate(email)) return null;
 
-    const users = await this.store.users.findOrCreate({ where: { email } });
+    const users : [IUserInstance, boolean] = await this.store.users.findOrCreate({ where: { email } });
     return users && users[0] ? users[0] : null;
   }
 
-  async bookTrips({ launchIds } : any) {
-    const userId = this.context.user.id;
+  public async bookTrips({ launchIds } : any) : Promise<Array<ITripInstance> | void>{
+    const userId : number = this.context.user.id;
     if (!userId) return;
 
     let results : any = [];
@@ -47,20 +52,20 @@ export class UserAPI extends DataSource {
     return results;
   }
 
-  async bookTrip({ launchId } : any) {
-    const userId = this.context.user.id;
+  public async bookTrip({ launchId } : any) : Promise<ITripInstance | boolean>{
+    const userId : number = this.context.user.id;
     const res = await this.store.trips.findOrCreate({
       where: { userId, launchId },
     });
     return res && res.length ? res[0].get() : false;
   }
 
-  async cancelTrip({ launchId } : any) {
+  public async cancelTrip({ launchId } : any) : Promise<boolean> {
     const userId = this.context.user.id;
     return !!this.store.trips.destroy({ where: { userId, launchId } });
   }
 
-  async getLaunchIdsByUser() {
+  public async getLaunchIdsByUser() : Promise<Array<number>> {
     const userId = this.context.user.id;
     const found = await this.store.trips.findAll({
       where: { userId },
@@ -70,7 +75,7 @@ export class UserAPI extends DataSource {
       : [];
   }
 
-  async isBookedOnLaunch({ launchId } : any) {
+  public async isBookedOnLaunch({ launchId } : any) : Promise<boolean> {
     if (!this.context || !this.context.user) return false;
     const userId = this.context.user.id;
     const found = await this.store.trips.findAll({

@@ -31,3 +31,9 @@ export interface IRocket {
     name : String;
     type : String;
 }
+
+export interface ITripUpdateResponse {
+    success : boolean;
+    message : string;
+    launches : Array<ILaunch>;
+}

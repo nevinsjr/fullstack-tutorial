@@ -23,7 +23,8 @@ export class LaunchAPI extends RESTDataSource {
         return this.launchReducer(res[0]);
     }
       
-    public async getLaunchesByIds({ launchIds } : { launchIds : Array<number> }) : Promise<Array<ILaunchResponse>>  {
+    // public async getLaunchesByIds({ launchIds } : { launchIds : Array<number> }) : Promise<Array<ILaunchResponse>>  {
+    public async getLaunchesByIds(launchIds : Array<number>) : Promise<Array<ILaunchResponse>>  {
         return Promise.all(
             launchIds.map((launchId : number) => this.getLaunchById({ launchId })),
         );

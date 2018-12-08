@@ -1,12 +1,14 @@
 import { IDataSources, ILaunchResponse } from "./datasources/datasources.interfaces";
 import { IResolvers, IResolverObject } from "graphql-tools";
 import { paginateResults } from './utils';
+import { ITripUpdateResponse } from "./schema/schema.interfaces";
 
 
 // TODO: so much typing to fix here...
 
 
 export const resolvers : IResolvers = {
+    //TODO: this is a hot mess
     Query: <IResolverObject>{
         //TODO: this is gross
         launches: async (_, { pageSize = 20, after } : {pageSize : number, after : any}, { dataSources } : { dataSources : IDataSources}) : Promise<{launches : Array<Object>; cursor : any; hasMore : boolean;}>  => {
@@ -30,6 +32,14 @@ export const resolvers : IResolvers = {
                   : false,
               };
 
+        },
+        launchesByUser: async (_, __, { dataSources } : {dataSources : IDataSources}) : Promise<{launches : Array<Object>}> => {
+            const userLaunchIds : Array<number> = await dataSources.userAPI.getLaunchIdsByUser();
+            const userLaunches : Array<ILaunchResponse> = await dataSources.launchAPI.getLaunchesByIds(userLaunchIds);
+            
+            return {
+                launches: userLaunches
+            }
         },
         launch: async (_, { id } : { id : number }, { dataSources } : { dataSources : IDataSources}) : Promise<{}> => 
             dataSources.launchAPI.getLaunchById({ launchId: id }),
@@ -65,4 +75,46 @@ export const resolvers : IResolvers = {
             );
         },
     },
+    Mutation: {
+        //TODO: seriously...
+        login: async (_, { email }, { dataSources }) : Promise<string | void > => {
+            const user = await dataSources.userAPI.findOrCreateUser({ email });
+            if (user) return new Buffer(email).toString('base64');
+        },
+        bookTrips: async (_, { launchIds }, { dataSources }) : Promise<ITripUpdateResponse> => {
+            const results = await dataSources.userAPI.bookTrips({ launchIds });
+            const launches = await dataSources.launchAPI.getLaunchesByIds({
+              launchIds,
+            });
+        
+            return {
+                success: results && results.length === launchIds.length,
+                message:
+                    results.length === launchIds.length
+                    ? 'trips booked successfully'
+                    : `the following launches couldn't be booked: ${launchIds.filter(
+                        id => !results.includes(id),
+                        )}`,
+                launches,
+            };
+          },
+          cancelTrip: async (_, { launchId }, { dataSources }) : Promise<ITripUpdateResponse> => {
+            const result = dataSources.userAPI.cancelTrip({ launchId });
+        
+            if (!result)
+              return {
+                success: false,
+                message: 'failed to cancel trip',
+                launches: []
+              };
+        
+            const launch = await dataSources.launchAPI.getLaunchById({ launchId });
+            return {
+              success: true,
+              message: 'trip cancelled',
+              launches: [launch],
+            };
+          },
+    },
+    
 };

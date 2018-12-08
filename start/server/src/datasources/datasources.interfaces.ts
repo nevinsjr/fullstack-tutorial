@@ -4,7 +4,7 @@ import { IMission, IRocket } from "../schema/schema.interfaces";
 
 /**
  * Interface describing the datasources we are plugging
- * into our APi.
+ * into our API.
  */
 export interface IDataSources {
     launchAPI : LaunchAPI;
